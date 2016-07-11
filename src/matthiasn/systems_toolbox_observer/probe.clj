@@ -15,4 +15,5 @@
                                         :host        "127.0.0.1"
                                         :port        6379
                                         :topic       "firehose"})]
-     [:cmd/attach-to-firehose :server/redis-cmp]]))
+     [:cmd/attach-to-firehose :server/redis-cmp]
+     [:cmd/route {:from :server/ws-cmp :to :server/redis-cmp}]]))
