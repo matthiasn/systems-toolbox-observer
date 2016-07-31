@@ -11,12 +11,16 @@
                  [hiccup "1.0.5"]
                  [hiccup-bridge "1.0.1"]
                  [clj-pid "0.1.2"]
+                 [cljsjs/moment "2.10.6-4"]
                  [matthiasn/systems-toolbox "0.6.1-alpha3"]
                  [matthiasn/systems-toolbox-ui "0.6.1-alpha5"]
                  [matthiasn/systems-toolbox-sente "0.6.1-alpha4"]
                  [matthiasn/systems-toolbox-metrics "0.6.1-alpha1"]
                  [matthiasn/systems-toolbox-redis "0.6.1-alpha1"]
                  [clojurewerkz/elastisch "2.2.2"]
+                 [org.webjars.bower/fontawesome "4.6.3"]
+                 [org.webjars.bower/normalize-css "3.0.3"]
+                 [org.webjars.npm/github-com-mrkelly-lato "0.3.0"]
                  [incanter "1.5.6"]
                  [clj-time "0.12.0"]]
 
@@ -33,6 +37,9 @@
    [test2junit "1.2.2"]
    [lein-doo "0.1.7"]
    [lein-codox "0.9.5" :exclusions [org.clojure/clojure]]]
+
+  :sass {:src "src/scss/"
+         :dst "resources/public/css/"}
 
   :cljsbuild
   {:builds

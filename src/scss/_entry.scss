@@ -1,0 +1,42 @@
+.entry {
+  padding: 0.5em 0.8em 0.2em 0.8em;
+
+  pre {
+    min-height: 22px;
+    margin: 0.3em 0 1em 0;
+
+    code {
+      white-space: pre-wrap;
+    }
+  }
+
+  .entry .mention-link {
+    color: #007d4e;
+    font-weight: bold;
+  }
+
+  p,ul {
+    margin-top: 0.2em;
+    margin-bottom: 0.4em;
+  }
+
+  h1,h2,h3,h4,h5,h6 {
+    margin-bottom: 0.3em;
+  }
+
+  time {
+    font-size: 0.7em;
+    font-weight: bold;
+    margin-right: 0.5em;
+  }
+
+  .show-data {
+    margin-left: 0.8em;
+    padding: 1px 5px;
+    color: white;
+    background-color: lighten(desaturate($hashtag-blue, 35%), 15%);
+    cursor: pointer;
+    font-size: 0.8em;
+  }
+
+}

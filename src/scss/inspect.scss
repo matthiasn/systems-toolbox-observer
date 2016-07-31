@@ -1,0 +1,28 @@
+$font-color: #576364;
+$body-background-color: #EEE;
+$green: #4CAF50;
+$red: rgb(202, 60, 60);
+$hashtag-blue: rgb(66, 184, 221);
+$entry-border-radius: 0.3em;
+
+body {
+  color: $font-color;
+  background-color: $body-background-color;
+  font-size: 12px;
+  font-weight: 300;
+  font-family: "Lato", sans-serif;
+}
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.flex-container {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+@import "entry.scss";

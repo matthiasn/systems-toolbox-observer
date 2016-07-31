@@ -18,14 +18,12 @@
               :media "screen" :rel "stylesheet"}]
       [:link {:href "/webjars/fontawesome/4.6.3/css/font-awesome.css"
               :media "screen" :rel "stylesheet"}]
-      [:link {:href "/webjars/leaflet/0.7.7/dist/leaflet.css"
-              :media "screen" :rel "stylesheet"}]
-      [:link {:href "/css/iwaswhere.css" :media "screen" :rel "stylesheet"}]]
+      [:link {:href "/css/inspect.css" :media "screen" :rel "stylesheet"}]]
      [:body
       [:div.flex-container
        [:div#header]
        [:div#search]
-       [:div#journal]]
+       [:div#timeline]]
       [:script {:src "/js/build/observer.js"}]]]))
 
 (def sente-map

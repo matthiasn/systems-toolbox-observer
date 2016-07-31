@@ -11,3 +11,4 @@ pom.xml.asc
 .hg/
 *.pid
 resources/public/
+.sass-cache/
