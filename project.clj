@@ -2,7 +2,7 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
-            :url "http://www.eclipse.org/legal/epl-v10.html"}
+            :url  "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.9.0-alpha8"]
                  [org.clojure/clojurescript "1.9.93"]
                  [org.clojure/tools.logging "0.3.1"]
@@ -19,5 +19,27 @@
                  [clojurewerkz/elastisch "2.2.2"]
                  [incanter "1.5.6"]
                  [clj-time "0.12.0"]]
+
   :source-paths ["src/clj/"]
-  :main matthiasn.systems-toolbox-observer.core)
+
+  :main matthiasn.systems-toolbox-observer.core
+
+  :plugins
+  [[lein-cljsbuild "1.1.3" :exclusions [org.apache.commons/commons-compress]]
+   [lein-figwheel "0.5.4-7" :exclusions [org.clojure/clojure]]
+   [lein-sassy "1.0.7"
+    :exclusions [org.clojure/clojure org.codehaus.plexus/plexus-utils]]
+   [com.jakemccrary/lein-test-refresh "0.16.0"]
+   [test2junit "1.2.2"]
+   [lein-doo "0.1.7"]
+   [lein-codox "0.9.5" :exclusions [org.clojure/clojure]]]
+
+  :cljsbuild
+  {:builds
+   [{:id           "release"
+     :source-paths ["src/cljc" "src/cljs"]
+     :figwheel     true
+     :compiler     {:main          "matthiasn.systems-toolbox-observer.core"
+                    :asset-path    "js/build"
+                    :output-to     "resources/public/js/build/observer.js"
+                    :optimizations :advanced}}]})

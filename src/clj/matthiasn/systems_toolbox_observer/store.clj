@@ -14,17 +14,18 @@
    ElasticSearch index."
   [{:keys [current-state msg-type msg-payload]}]
   (let [conn (:conn current-state)
-        ;        es-id (str (st/now))
-        ;es-id (str (:cmp-id msg-payload) "-" (:corr-id (:msg-meta msg-payload)))
         es-id (:firehose-id msg-payload)
         new-state (-> current-state
                       (update-in [:count] inc)
                       (update-in [:messages] #(vec (conj % msg-payload))))
-        doc {:msg (pr-str msg-payload)}]
+        edn-msg (pr-str msg-payload)
+        doc {:msg edn-msg}]
     (try
       (esd/put conn es-index "st-msg" es-id doc)
       (catch Exception ex (log/error "Exception when persisting msg:" ex)))
-    {:new-state new-state}))
+    {:new-state new-state
+     :emit-msg  (with-meta [:firehose/msg (read-string edn-msg)]
+                           {:sente-uid :broadcast})}))
 
 (defn persistence-state-fn
   "Initializes ElasticSearch connection."

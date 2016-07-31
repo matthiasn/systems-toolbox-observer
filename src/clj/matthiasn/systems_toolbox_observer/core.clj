@@ -22,7 +22,8 @@
                                       {:host        "127.0.0.1"
                                        :port        6379
                                        :topic       "firehose"})}]
-     [:cmd/route {:from :server/redis-cmp :to :server/store-cmp}]]))
+     [:cmd/route {:from :server/redis-cmp :to :server/store-cmp}]
+     [:cmd/route {:from :server/store-cmp :to :server/ws-cmp}]]))
 
 (defn -main
   "Starts the application from command line, saves and logs process ID.

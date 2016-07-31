@@ -26,15 +26,9 @@
        [:div#header]
        [:div#search]
        [:div#journal]]
-      ;; Currently, from http://www.orangefreesounds.com/old-clock-ringing-short/
-      ;; TODO: record own alarm clock
-      [:audio#ringer {:autoPlay false :loop false}
-       [:source {:src "/mp3/old-clock-ringing-short.mp3" :type "audio/mp4"}]]
-      [:audio#ticking-clock {:autoPlay false :loop false}
-       [:source {:src "/mp3/tick.ogg" :type "audio/ogg"}]]
-      [:script {:src "/js/build/iwaswhere.js"}]]]))
+      [:script {:src "/js/build/observer.js"}]]]))
 
 (def sente-map
   "Configuration map for sente-cmp."
   {:index-page-fn index-page
-   :relay-types   #{:cmd/keep-alive-res :entry/saved :state/new}})
+   :relay-types   #{:firehose/msg}})
