@@ -1,0 +1,23 @@
+#search {
+  width: 100%;
+  flex: 0 0 auto;
+  background-color: #2d3e50;
+}
+
+.search {
+  flex-flow: row;
+  align-items: center;
+  padding: 5px 1em 0.5em 1em;
+  margin-right: 90px;
+  display: flex;
+  h1 {
+    margin: 0;
+  }
+}
+
+.search-field {
+  flex-grow: 1;
+  margin: 4px 0 4px 1.2em;
+  padding: 4px;
+  background-color: white;
+}

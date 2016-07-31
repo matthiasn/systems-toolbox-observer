@@ -5,25 +5,34 @@
             [cljs.pprint :as pp]))
 
 (defn pprinted-div
-  [data label]
-  (let [expanded (rc/atom false)
-        toggle-click {:on-click #(swap! expanded not)}]
-    (fn [data label]
-      (if @expanded
-        [:div
-         [:span.show-data toggle-click (str "hide " label)]
-         [:pre [:code (with-out-str (pp/pprint data))]]]
-        [:span.show-data toggle-click (str "show " label)]))))
+  ""
+  [entry k state]
+  (when (and (k @state) k entry)
+    [:pre [:code (with-out-str (pp/pprint (k entry)))]]))
+
+(defn toggle-button
+  ""
+  [entry state k label]
+  (when (k entry)
+    [:span.show-data {:on-click (fn [_] (swap! state update-in [k] not))}
+     (str (if (k @state) "hide " "show ") label)]))
 
 (defn timeline-entry
   ""
   [entry]
-  [:div.entry
-   [:time (.format (.utc js/moment (:ts entry)) "YYYY-MM-DD HH:MM:ss.SSS")] " "
-   (:cmp-id entry) " "
-   (when (:msg entry) [pprinted-div (:msg-meta entry) "metadata"])
-   (when (:msg entry) [pprinted-div (:msg entry) "msg"])
-   (when (:snapshot entry) [pprinted-div (:snapshot entry) "snapshot"])])
+  (let [state (rc/atom {:msg      false
+                        :msg-meta false
+                        :snapshot false})]
+    (fn [entry]
+      [:div.entry
+       [:time (.format (.utc js/moment (:ts entry)) "YYYY-MM-DD HH:MM:ss.SSS")]
+       (str (:cmp-id entry))
+       [toggle-button entry state :msg-meta "metadata"]
+       [toggle-button entry state :msg "msg"]
+       [toggle-button entry state :snapshot "snapshot"]
+       [pprinted-div entry :msg-meta state]
+       [pprinted-div entry :msg state]
+       [pprinted-div entry :snapshot state]])))
 
 (defn timeline-view
   ""

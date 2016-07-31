@@ -2,6 +2,7 @@
   (:require [matthiasn.systems-toolbox.switchboard :as sb]
             [matthiasn.systems-toolbox-sente.client :as sente]
             [matthiasn.systems-toolbox-observer.store :as store]
+            [matthiasn.systems-toolbox-observer.search :as search]
             [matthiasn.systems-toolbox-observer.timeline :as tl]))
 
 (enable-console-print!)
@@ -17,6 +18,7 @@
     switchboard
     [[:cmd/init-comp #{(sente/cmp-map :client/ws-cmp sente-cfg)
                        (store/cmp-map :client/store-cmp)
+                       (search/cmp-map :client/search-cmp)
                        (tl/cmp-map :client/timeline-cmp)}]
 
      [:cmd/route {:from #{:client/ws-cmp}
