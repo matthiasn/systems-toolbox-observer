@@ -9,7 +9,7 @@
 
 (defonce switchboard (sb/component :client/switchboard))
 
-(def sente-cfg {:relay-types #{:firehose/msg}})
+(def sente-cfg {:relay-types #{:firehose/msg :entries/query}})
 
 (defn init!
   "Initializes client-side system."
@@ -23,6 +23,9 @@
 
      [:cmd/route {:from #{:client/ws-cmp}
                   :to   :client/store-cmp}]
+
+     [:cmd/route {:from #{:client/search-cmp}
+                  :to   :client/ws-cmp}]
 
      [:cmd/observe-state {:from :client/store-cmp
                           :to   #{:client/timeline-cmp}}]]))

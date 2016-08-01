@@ -25,7 +25,7 @@
                         :snapshot false})]
     (fn [entry]
       [:div.entry
-       [:time (.format (.utc js/moment (:ts entry)) "YYYY-MM-DD HH:MM:ss.SSS")]
+       [:time (.format (.utc js/moment (:ts entry)) "YYYY-MM-DD HH:mm:ss.SSS")]
        (str (:cmp-id entry))
        [toggle-button entry state :msg-meta "metadata"]
        [toggle-button entry state :msg "msg"]

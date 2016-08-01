@@ -2,6 +2,10 @@
   (:require [matthiasn.systems-toolbox.switchboard :as sb]
             [matthiasn.systems-toolbox-redis.sender :as redis]))
 
+(def redis-host (get (System/getenv) "PROBE_REDIS_HOST" "127.0.0.1"))
+(def redis-port (Integer/parseInt
+                  (get (System/getenv) "PROBE_REDIS_PORT" "6379")))
+
 (defn start!
   "Starts Redis sender component and attaches it to firehose."
   [switchboard]
@@ -13,8 +17,8 @@
                                      :firehose/cmp-recv
                                      :firehose/cmp-publish-state
                                      :firehose/cmp-recv-state}
-                      :host        "127.0.0.1"
-                      :port        6379
+                      :host        redis-host
+                      :port        redis-port
                       :topic       "firehose"})]
      [:cmd/attach-to-firehose :server/redis-cmp]
      [:cmd/route {:from :server/ws-cmp :to :server/redis-cmp}]]))

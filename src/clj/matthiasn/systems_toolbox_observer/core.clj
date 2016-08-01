@@ -23,6 +23,7 @@
                                        :port        6379
                                        :topic       "firehose"})}]
      [:cmd/route {:from :server/redis-cmp :to :server/store-cmp}]
+     [:cmd/route {:from :server/ws-cmp :to :server/store-cmp}]
      [:cmd/route {:from :server/store-cmp :to :server/ws-cmp}]]))
 
 (defn -main

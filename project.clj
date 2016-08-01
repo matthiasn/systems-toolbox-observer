@@ -1,9 +1,9 @@
-(defproject matthiasn/systems-toolbox-observer "0.6.1-alpha1"
+(defproject matthiasn/systems-toolbox-observer "0.6.1-alpha2"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.9.0-alpha8"]
+  :dependencies [[org.clojure/clojure "1.9.0-alpha10"]
                  [org.clojure/clojurescript "1.9.93"]
                  [org.clojure/tools.logging "0.3.1"]
                  [org.clojure/tools.namespace "0.2.11"]
@@ -12,11 +12,12 @@
                  [hiccup-bridge "1.0.1"]
                  [clj-pid "0.1.2"]
                  [cljsjs/moment "2.10.6-4"]
+                 [com.taoensso/encore "2.68.1"]
                  [matthiasn/systems-toolbox "0.6.1-alpha3"]
                  [matthiasn/systems-toolbox-ui "0.6.1-alpha5"]
-                 [matthiasn/systems-toolbox-sente "0.6.1-alpha4"]
+                 [matthiasn/systems-toolbox-sente "0.6.1-alpha5"]
                  [matthiasn/systems-toolbox-metrics "0.6.1-alpha1"]
-                 [matthiasn/systems-toolbox-redis "0.6.1-alpha1"]
+                 [matthiasn/systems-toolbox-redis "0.6.1-alpha2"]
                  [clojurewerkz/elastisch "2.2.2"]
                  [org.webjars.bower/fontawesome "4.6.3"]
                  [org.webjars.bower/normalize-css "3.0.3"]
