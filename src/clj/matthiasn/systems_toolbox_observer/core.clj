@@ -24,7 +24,8 @@
                                        :topic       "firehose"})}]
      [:cmd/route {:from :server/redis-cmp :to :server/store-cmp}]
      [:cmd/route {:from :server/ws-cmp :to :server/store-cmp}]
-     [:cmd/route {:from :server/store-cmp :to :server/ws-cmp}]]))
+     [:cmd/route {:from :server/store-cmp :to :server/ws-cmp}]
+     [:cmd/observe-state {:from :server/ws-cmp :to :server/store-cmp}]]))
 
 (defn -main
   "Starts the application from command line, saves and logs process ID.

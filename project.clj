@@ -11,6 +11,7 @@
                  [hiccup "1.0.5"]
                  [hiccup-bridge "1.0.1"]
                  [clj-pid "0.1.2"]
+                 [pandect "0.6.0"]
                  [cljsjs/moment "2.10.6-4"]
                  [com.taoensso/encore "2.68.1"]
                  [matthiasn/systems-toolbox "0.6.1-alpha3"]
