@@ -4,6 +4,7 @@
             [matthiasn.systems-toolbox-sente.server :as sente]
             [clojure.tools.logging :as log]
             [clj-pid.core :as pid]
+            [matthiasn.systems-toolbox-observer.spec]
             [matthiasn.systems-toolbox-observer.index :as idx]
             [matthiasn.systems-toolbox-observer.store :as st]))
 

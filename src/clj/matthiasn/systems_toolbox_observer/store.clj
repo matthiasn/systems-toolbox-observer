@@ -35,8 +35,7 @@
                       (update-in [:count] inc)
                       (update-in [:messages] #(vec (conj % msg-payload))))
         edn-msg (pr-str msg-payload)
-        doc {:msg edn-msg
-             :ts  (:ts msg-payload)}]
+        doc {:msg edn-msg :ts (:ts msg-payload)}]
     (try
       (esd/put conn es-index es-msg-type es-id doc)
       (deliver-perc current-state conn put-fn edn-msg doc)

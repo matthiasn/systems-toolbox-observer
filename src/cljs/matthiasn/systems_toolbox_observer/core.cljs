@@ -1,6 +1,7 @@
 (ns matthiasn.systems-toolbox-observer.core
   (:require [matthiasn.systems-toolbox.switchboard :as sb]
             [matthiasn.systems-toolbox-sente.client :as sente]
+            [matthiasn.systems-toolbox-observer.spec]
             [matthiasn.systems-toolbox-observer.store :as store]
             [matthiasn.systems-toolbox-observer.search :as search]
             [matthiasn.systems-toolbox-observer.timeline :as tl]))

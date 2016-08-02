@@ -26,7 +26,7 @@
                  [incanter "1.5.6"]
                  [clj-time "0.12.0"]]
 
-  :source-paths ["src/clj/"]
+  :source-paths ["src/cljc/" "src/clj/"]
 
   :main matthiasn.systems-toolbox-observer.core
 
