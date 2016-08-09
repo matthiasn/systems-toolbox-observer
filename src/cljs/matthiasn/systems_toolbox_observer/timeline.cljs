@@ -26,7 +26,8 @@
     (fn [entry]
       [:div.entry
        [:time (.format (.utc js/moment (:ts entry)) "YYYY-MM-DD HH:mm:ss.SSS")]
-       (str (:cmp-id entry))
+       (str (:cmp-id entry) " ")
+       (str (first (:msg entry)))
        [toggle-button entry state :msg-meta "metadata"]
        [toggle-button entry state :msg "msg"]
        [toggle-button entry state :snapshot "snapshot"]
@@ -40,7 +41,7 @@
   (let [store-snapshot @observed]
     [:div.timeline
      [:div.journal-entries
-      (for [entry (take 50 (reverse (:entries store-snapshot)))]
+      (for [entry (take 250 (reverse (:entries store-snapshot)))]
         ^{:key (:firehose-id entry)}
         [timeline-entry entry])]]))
 

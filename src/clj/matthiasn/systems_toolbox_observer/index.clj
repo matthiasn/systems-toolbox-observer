@@ -12,7 +12,7 @@
      [:head
       [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
       [:title "Inspect"]
-      [:link {:href "/webjars/normalize-css/3.0.3/normalize.css"
+      [:link {:href "/webjars/normalize-css/4.1.1/normalize.css"
               :media "screen" :rel "stylesheet"}]
       [:link {:href "/webjars/github-com-mrkelly-lato/0.3.0/css/lato.css"
               :media "screen" :rel "stylesheet"}]
@@ -29,4 +29,4 @@
 (def sente-map
   "Configuration map for sente-cmp."
   {:index-page-fn index-page
-   :relay-types   #{:firehose/msg :cmd/query :entries/prev}})
+   :relay-types   #{:firehose/msg :firehose/snapshot :entries/prev}})

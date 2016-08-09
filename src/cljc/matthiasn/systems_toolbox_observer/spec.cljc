@@ -1,10 +1,10 @@
 (ns matthiasn.systems-toolbox-observer.spec
   (:require #?(:clj  [clojure.spec :as s]
-               :cljs [cljs.spec :as s])))
+               :cljs [cljs.spec :as s])
+    [matthiasn.systems-toolbox.spec]))
 
-(s/def :firehose/msg
-  (s/keys :req-un [:iww.cfg/path
-                   :iww.entry/timestamp]))
+(s/def :firehose/msg :firehose/cmp-recv)
+(s/def :firehose/snapshot :firehose/cmp-publish-state)
 
 (s/def :qs/default_operator string?)
 (s/def :qs/query string?)
@@ -24,4 +24,7 @@
                    :q/n
                    :q/from]))
 
+(s/def :q/result vector?)
 
+(s/def :entries/prev
+  (s/keys :req-un [:q/result]))

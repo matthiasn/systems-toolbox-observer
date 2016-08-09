@@ -1,4 +1,4 @@
-(defproject matthiasn/systems-toolbox-observer "0.6.1-alpha2"
+(defproject matthiasn/systems-toolbox-observer "0.6.1-alpha3"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
@@ -13,15 +13,15 @@
                  [clj-pid "0.1.2"]
                  [pandect "0.6.0"]
                  [cljsjs/moment "2.10.6-4"]
-                 [com.taoensso/encore "2.68.1"]
-                 [matthiasn/systems-toolbox "0.6.1-alpha3"]
-                 [matthiasn/systems-toolbox-ui "0.6.1-alpha5"]
+                 [com.taoensso/encore "2.74.0"]
+                 [matthiasn/systems-toolbox "0.6.1-alpha4"]
+                 [matthiasn/systems-toolbox-ui "0.6.1-alpha6"]
                  [matthiasn/systems-toolbox-sente "0.6.1-alpha5"]
                  [matthiasn/systems-toolbox-metrics "0.6.1-alpha1"]
                  [matthiasn/systems-toolbox-redis "0.6.1-alpha2"]
                  [clojurewerkz/elastisch "2.2.2"]
                  [org.webjars.bower/fontawesome "4.6.3"]
-                 [org.webjars.bower/normalize-css "3.0.3"]
+                 [org.webjars.bower/normalize-css "4.1.1"]
                  [org.webjars.npm/github-com-mrkelly-lato "0.3.0"]
                  [incanter "1.5.6"]
                  [clj-time "0.12.0"]]

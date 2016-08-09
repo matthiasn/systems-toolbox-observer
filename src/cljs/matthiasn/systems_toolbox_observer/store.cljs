@@ -24,5 +24,6 @@
   {:cmp-id      cmp-id
    :state-fn    state-fn
    ;   :state-spec        :state/client-store-spec
-   :handler-map {:firehose/msg msg-handler
-                 :entries/prev prev-handler}})
+   :handler-map {:firehose/msg      msg-handler
+                 :firehose/snapshot msg-handler
+                 :entries/prev      prev-handler}})

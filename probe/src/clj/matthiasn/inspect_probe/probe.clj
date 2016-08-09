@@ -1,4 +1,4 @@
-(ns matthiasn.systems-toolbox-observer.probe
+(ns matthiasn.inspect-probe.probe
   (:require [matthiasn.systems-toolbox.switchboard :as sb]
             [matthiasn.systems-toolbox-redis.sender :as redis]))
 
@@ -21,4 +21,5 @@
                       :port        redis-port
                       :topic       "firehose"})]
      [:cmd/attach-to-firehose :server/redis-cmp]
-     [:cmd/route {:from :server/ws-cmp :to :server/redis-cmp}]]))
+     [:cmd/route {:from :server/ws-cmp
+                  :to   :server/redis-cmp}]]))

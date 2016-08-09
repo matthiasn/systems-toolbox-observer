@@ -6,7 +6,8 @@
             [clojurewerkz.elastisch.rest.percolation :as perc]
             [pandect.core :as p]
             [clojure.tools.logging :as log]
-            [matthiasn.systems-toolbox.handler-utils :as hu]))
+            [matthiasn.systems-toolbox.handler-utils :as hu]
+            [clojure.pprint :as pp]))
 
 (def es-address (get (System/getenv) "ES-ADDRESS" "http://127.0.0.1:9200"))
 (def es-index (get (System/getenv) "ES-INDEX" "st-observer"))
@@ -15,15 +16,17 @@
 
 (defn deliver-perc
   "Find and deliver pecolation matches."
-  [current-state conn put-fn edn-msg doc]
+  [current-state conn put-fn msg-type msg-payload doc]
   (let [response (perc/percolate conn es-perc-index es-msg-type :doc doc)
         matches (set (map :_id (esrsp/matches-from response)))
         connected-uids (:connected-uids current-state)
-        subscriptions (:subscriptions current-state)]
+        subscriptions (:subscriptions current-state)
+        put-msg-type (if (msg-type #{:firehose/cmp-recv :firehose/cmp-put})
+                       :firehose/msg
+                       :firehose/snapshot)]
     (doseq [uid (:any connected-uids)]
       (when (contains? matches (get subscriptions uid))
-        (put-fn (with-meta [:firehose/msg (read-string edn-msg)]
-                           {:sente-uid uid}))))))
+        (put-fn (with-meta [put-msg-type msg-payload] {:sente-uid uid}))))))
 
 (defn firehose-msg-handler
   "Handler for firehose messages, persists messages into configured
@@ -34,11 +37,10 @@
         new-state (-> current-state
                       (update-in [:count] inc)
                       (update-in [:messages] #(vec (conj % msg-payload))))
-        edn-msg (pr-str msg-payload)
-        doc {:msg edn-msg :ts (:ts msg-payload)}]
+        doc {:msg (pr-str msg-payload) :ts (:ts msg-payload)}]
     (try
       (esd/put conn es-index es-msg-type es-id doc)
-      (deliver-perc current-state conn put-fn edn-msg doc)
+      (deliver-perc current-state conn put-fn msg-type msg-payload doc)
       (catch Exception ex (log/error "Exception when persisting msg:" ex)))
     {:new-state new-state}))
 
