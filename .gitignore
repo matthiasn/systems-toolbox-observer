@@ -12,3 +12,4 @@ pom.xml.asc
 *.pid
 resources/public/
 .sass-cache/
+probe/target/

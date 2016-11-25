@@ -38,6 +38,7 @@
                       (update-in [:count] inc)
                       (update-in [:messages] #(vec (conj % msg-payload))))
         doc {:msg (pr-str msg-payload) :ts (:ts msg-payload)}]
+    (log/info "Firehose message" msg-type msg-payload)
     (try
       (esd/put conn es-index es-msg-type es-id doc)
       (deliver-perc current-state conn put-fn msg-type msg-payload doc)

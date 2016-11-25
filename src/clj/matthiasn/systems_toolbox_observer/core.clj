@@ -10,6 +10,7 @@
 
 (defonce switchboard (sb/component :server/switchboard))
 
+
 (defn restart!
   "Starts or restarts system by asking switchboard to fire up the store
    component, Redis client, ElasticSearch client, then wiring all messages from
@@ -20,9 +21,9 @@
     [[:cmd/init-comp #{(st/cmp-map :server/store-cmp)
                        (sente/cmp-map :server/ws-cmp idx/sente-map)
                        (redis/cmp-map :server/redis-cmp
-                                      {:host        "127.0.0.1"
-                                       :port        6379
-                                       :topic       "firehose"})}]
+                                      {:host  "127.0.0.1"
+                                       :port  6379
+                                       :topic "firehose"})}]
      [:cmd/route {:from :server/redis-cmp :to :server/store-cmp}]
      [:cmd/route {:from :server/ws-cmp :to :server/store-cmp}]
      [:cmd/route {:from :server/store-cmp :to :server/ws-cmp}]

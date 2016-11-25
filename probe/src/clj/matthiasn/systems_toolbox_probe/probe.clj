@@ -1,4 +1,4 @@
-(ns matthiasn.inspect-probe.probe
+(ns matthiasn.systems-toolbox-probe.probe
   (:require [matthiasn.systems-toolbox.switchboard :as sb]
             [matthiasn.systems-toolbox-redis.sender :as redis]))
 

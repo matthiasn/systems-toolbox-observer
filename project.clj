@@ -3,42 +3,43 @@
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.9.0-alpha10"]
-                 [org.clojure/clojurescript "1.9.93"]
+  :dependencies [[org.clojure/clojure "1.9.0-alpha14"]
+                 [org.clojure/clojurescript "1.9.293"]
                  [org.clojure/tools.logging "0.3.1"]
                  [org.clojure/tools.namespace "0.2.11"]
                  [ch.qos.logback/logback-classic "1.1.7"]
                  [hiccup "1.0.5"]
                  [hiccup-bridge "1.0.1"]
                  [clj-pid "0.1.2"]
-                 [pandect "0.6.0"]
+                 [pandect "0.6.1"]
                  [cljsjs/moment "2.10.6-4"]
-                 [com.taoensso/encore "2.74.0"]
-                 [matthiasn/systems-toolbox "0.6.1-alpha4"]
-                 [matthiasn/systems-toolbox-ui "0.6.1-alpha6"]
-                 [matthiasn/systems-toolbox-sente "0.6.1-alpha5"]
-                 [matthiasn/systems-toolbox-metrics "0.6.1-alpha1"]
-                 [matthiasn/systems-toolbox-redis "0.6.1-alpha2"]
+                 [com.taoensso/encore "2.87.0"]
+                 [matthiasn/systems-toolbox "0.6.2"]
+                 ;[matthiasn/systems-toolbox-redis "0.6.1-alpha4"]
+                 [matthiasn/systems-toolbox-redis "0.6.2"]
+                 [matthiasn/systems-toolbox-ui "0.6.1"]
+                 [matthiasn/systems-toolbox-sente "0.6.1"]
+                 [matthiasn/systems-toolbox-metrics "0.6.1"]
                  [clojurewerkz/elastisch "2.2.2"]
                  [org.webjars.bower/fontawesome "4.6.3"]
                  [org.webjars.bower/normalize-css "4.1.1"]
                  [org.webjars.npm/github-com-mrkelly-lato "0.3.0"]
                  [incanter "1.5.6"]
-                 [clj-time "0.12.0"]]
+                 [clj-time "0.12.2"]]
 
   :source-paths ["src/cljc/" "src/clj/"]
 
   :main matthiasn.systems-toolbox-observer.core
 
   :plugins
-  [[lein-cljsbuild "1.1.3" :exclusions [org.apache.commons/commons-compress]]
+  [[lein-cljsbuild "1.1.4" :exclusions [org.apache.commons/commons-compress]]
    [lein-figwheel "0.5.4-7" :exclusions [org.clojure/clojure]]
    [lein-sassy "1.0.7"
     :exclusions [org.clojure/clojure org.codehaus.plexus/plexus-utils]]
-   [com.jakemccrary/lein-test-refresh "0.16.0"]
-   [test2junit "1.2.2"]
+   [com.jakemccrary/lein-test-refresh "0.18.0"]
+   [test2junit "1.2.5"]
    [lein-doo "0.1.7"]
-   [lein-codox "0.9.5" :exclusions [org.clojure/clojure]]]
+   [lein-codox "0.10.2" :exclusions [org.clojure/clojure]]]
 
   :sass {:src "src/scss/"
          :dst "resources/public/css/"}
