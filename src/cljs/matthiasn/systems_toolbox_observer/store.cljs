@@ -45,12 +45,18 @@
   [{:keys [current-state]}]
   (let [qid (keyword (h/make-uuid))
         cfg {:type      :timeline
-             :data-grid {:x 16 :y 0 :w 8 :h 10}}]
+             :data-grid {:x 0 :y 0 :w 8 :h 10}}]
     {:new-state (assoc-in current-state [:widgets qid] cfg)}))
 
 (defn toggle-drag
   [{:keys [current-state]}]
   {:new-state (update-in current-state [:cfg :reconfigure-grid] not)})
+
+(defn fetched-entry
+  [{:keys [current-state msg-payload]}]
+  (let [fid (:firehose-id msg-payload)
+        new-state (assoc-in current-state [:fetched fid] msg-payload)]
+    {:new-state new-state}))
 
 (defn cmp-map
   "Client-side store component map."
@@ -63,4 +69,5 @@
                  :cmd/show-new      show-new-handler
                  :grid/add-widget   add-widget
                  :grid/toggle-drag  toggle-drag
+                 :entry/fetched     fetched-entry
                  :entries/prev      prev-handler}})

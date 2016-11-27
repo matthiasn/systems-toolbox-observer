@@ -10,7 +10,7 @@
 
 (defonce switchboard (sb/component :client/switchboard))
 
-(def sente-cfg {:relay-types #{:entries/query}})
+(def sente-cfg {:relay-types #{:entries/query :entry/fetch}})
 
 (defn init!
   "Initializes client-side system."

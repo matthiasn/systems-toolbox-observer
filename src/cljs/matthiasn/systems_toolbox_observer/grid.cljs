@@ -6,10 +6,18 @@
             [cljs.pprint :as pp]))
 
 (defn pprinted-div
-  ""
-  [entry k state]
-  (when (and (k @state) k entry)
-    [:pre [:code (with-out-str (pp/pprint (k entry)))]]))
+  "Show pretty printed data structure. When not fetched yet, initiate
+   fetch from backend."
+  [entry k state snapshot put-fn]
+  (when (and (k @state) (k entry))
+    (let [firehose-id (:firehose-id entry)]
+      (prn firehose-id (get-in snapshot [:fetched firehose-id]))
+      (if (or (= :not-fetched (:snapshot entry))
+              (= :not-fetched (second (:msg entry))))
+        (if-let [fetched (get-in snapshot [:fetched firehose-id])]
+          [:pre [:code (with-out-str (pp/pprint (k fetched)))]]
+          (put-fn [:entry/fetch firehose-id]))
+        [:pre [:code (with-out-str (pp/pprint (k entry)))]]))))
 
 (defn toggle-button
   ""
@@ -20,24 +28,25 @@
 
 (defn timeline-entry
   ""
-  [entry]
+  [entry snapshot put-fn]
   (let [state (rc/atom {:msg      false
                         :msg-meta false
                         :snapshot false})]
-    (fn [entry]
+    (fn [entry snapshot put-fn]
       [:div.entry
        [:div
         [:time (.format (.utc js/moment (:ts entry)) "YYYY-MM-DD HH:mm:ss.SSS")]
         (str (:cmp-id entry) " ")
         (str (first (:msg entry)))]
+       [:div (:firehose-id entry)]
        [:div.show-data-btns
         [toggle-button entry state :msg-meta "metadata"]
         [toggle-button entry state :msg "msg"]
         [toggle-button entry state :snapshot "snapshot"]]
        [:div
-        [pprinted-div entry :msg-meta state]
-        [pprinted-div entry :msg state]
-        [pprinted-div entry :snapshot state]]])))
+        [pprinted-div entry :msg-meta state snapshot put-fn]
+        [pprinted-div entry :msg state snapshot put-fn]
+        [pprinted-div entry :snapshot state snapshot put-fn]]])))
 
 (defn search-view
   "Renders search component."
@@ -76,7 +85,7 @@
      [new-entries query-id new-cnt put-fn]
      (for [entry entries]
        ^{:key (:firehose-id entry)}
-       [timeline-entry entry])]))
+       [timeline-entry entry snapshot put-fn])]))
 
 (defn widget-view
   [snapshot query-id put-fn cfg]

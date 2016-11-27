@@ -49,7 +49,7 @@
    ElasticSearch query.
    Also registers percolation search with ID based on hash of the query."
   [{:keys [current-state msg-payload msg-meta]}]
-  (prn "es-query" msg-payload)
+  (log/info "es-query" msg-payload)
   (let [conn (:conn current-state)
         {:keys [query n from query-id]} msg-payload
         uid (:sente-uid msg-meta)
@@ -66,11 +66,31 @@
                  (map read-string))
         new-state (assoc-in current-state [:subscriptions perc-id]
                             {:sente-uid uid
-                             :query-id query-id})]
+                             :query-id query-id})
+        strip-msg (fn [entry]
+                    (if-let [msg (:msg entry)]
+                      (assoc-in entry [:msg] [(first msg) :not-fetched])
+                      entry))
+        strip-snapshot (fn [entry]
+                    (if (:snapshot entry)
+                      (assoc-in entry [:snapshot] :not-fetched)
+                      entry))]
     (perc/register-query conn es-perc-index perc-id :query query)
+    ;(prn res)
     {:new-state new-state
-     :emit-msg  [:entries/prev {:result   (vec (reverse res))
-                                :query-id query-id}]}))
+     :emit-msg  [:entries/prev
+                 {:result   (mapv #(-> % (strip-msg) (strip-snapshot))
+                                  (reverse res))
+                  :query-id query-id}]}))
+
+(defn fetch-entry
+  ""
+  [{:keys [current-state msg-payload ]}]
+  (log/info "fetch entry" msg-payload)
+  (let [conn (:conn current-state)
+        entry (:_source (esd/get conn es-index "st-msg" msg-payload))
+        parsed (read-string (:msg entry))]
+    {:emit-msg  [:entry/fetched parsed]}))
 
 (defn persistence-state-fn
   "Initializes ElasticSearch connection."
@@ -91,5 +111,6 @@
                        :firehose/cmp-recv          firehose-msg-handler
                        :firehose/cmp-publish-state firehose-msg-handler
                        :firehose/cmp-recv-state    firehose-msg-handler
+                       :entry/fetch                fetch-entry
                        :entries/query              es-query}
    :state-pub-handler (hu/assoc-in-cmp [:connected-uids])})
