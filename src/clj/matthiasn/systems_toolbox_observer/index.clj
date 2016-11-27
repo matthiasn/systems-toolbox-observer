@@ -29,4 +29,4 @@
 (def sente-map
   "Configuration map for sente-cmp."
   {:index-page-fn index-page
-   :relay-types   #{:firehose/msg :firehose/snapshot :entries/prev :entry/fetched}})
+   :relay-types   #{:entry/perc-match :entry/new :entries/prev :entry/fetched}})

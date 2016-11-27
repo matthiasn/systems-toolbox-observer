@@ -34,8 +34,8 @@
 
   :plugins
   [[lein-cljsbuild "1.1.4" :exclusions [org.apache.commons/commons-compress]]
-   [lein-figwheel "0.5.4-7" :exclusions [org.clojure/clojure]]
-   [lein-sassy "1.0.7"
+   [lein-figwheel "0.5.8" :exclusions [org.clojure/clojure]]
+   [lein-sassy "1.0.8"
     :exclusions [org.clojure/clojure org.codehaus.plexus/plexus-utils]]
    [com.jakemccrary/lein-test-refresh "0.18.0"]
    [test2junit "1.2.5"]
@@ -45,11 +45,22 @@
   :sass {:src "src/scss/"
          :dst "resources/public/css/"}
 
+  :figwheel {:server-port 3448
+             :css-dirs    ["resources/public/css"]}
+
   :cljsbuild
   {:builds
-   [{:id           "release"
-     :source-paths ["src/cljc" "src/cljs"]
+   [{:id           "dev"
+     :source-paths ["src/cljc" "src/cljs" "env/dev/cljs"]
      :figwheel     true
+     :compiler     {:main          "matthiasn.systems-toolbox-observer.dev"
+                    :asset-path    "js/build"
+                    :optimizations :none
+                    :output-dir    "resources/public/js/build/"
+                    :output-to     "resources/public/js/build/observer.js"
+                    :source-map    true}}
+    {:id           "release"
+     :source-paths ["src/cljc" "src/cljs"]
      :compiler     {:main          "matthiasn.systems-toolbox-observer.core"
                     :asset-path    "js/build"
                     :output-to     "resources/public/js/build/observer.js"

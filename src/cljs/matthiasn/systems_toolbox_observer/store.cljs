@@ -12,8 +12,9 @@
   "Generate initial component state."
   [_put-fn]
   (let [state (atom {:entries {}
+                     :counters {}
                      :cfg (:reconfigure-grid false)
-                     :widgets {:query-1 {:type      :timeline
+                     :widgets {:query-1 {:type      :counters
                                          :data-grid {:x 0 :y 0 :w 8 :h 10}}
                                :query-2 {:type      :timeline
                                          :data-grid {:x 8 :y 0 :w 8 :h 10}}
@@ -58,16 +59,30 @@
         new-state (assoc-in current-state [:fetched fid] msg-payload)]
     {:new-state new-state}))
 
+(defn new-entry
+  [{:keys [current-state msg-payload]}]
+  (let [fid (:firehose-id msg-payload)
+        msg-type (first (:msg msg-payload))
+        path (if msg-type
+               [:counters :msg-types msg-type]
+               [:counters :snapshots (:cmp-id msg-payload)])
+        cnt (inc (get-in current-state path 0))
+        new-state (-> current-state
+                      (assoc-in [:new-entries fid] msg-payload)
+                      (assoc-in path cnt))]
+    (prn (:counters new-state))
+    {:new-state new-state}))
+
 (defn cmp-map
   "Client-side store component map."
   [cmp-id]
   {:cmp-id      cmp-id
    :state-fn    state-fn
    ;   :state-spec        :state/client-store-spec
-   :handler-map {:firehose/msg      msg-handler
-                 :firehose/snapshot msg-handler
-                 :cmd/show-new      show-new-handler
+   :handler-map {:cmd/show-new      show-new-handler
                  :grid/add-widget   add-widget
                  :grid/toggle-drag  toggle-drag
+                 :entry/new         new-entry
+                 :entry/perc-match  msg-handler
                  :entry/fetched     fetched-entry
                  :entries/prev      prev-handler}})

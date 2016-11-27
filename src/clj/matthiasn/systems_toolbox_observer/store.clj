@@ -13,20 +13,29 @@
 (def es-perc-index (get (System/getenv) "ES-PERC-INDEX" "st-observer-perc"))
 (def es-msg-type "st-msg")
 
+(defn strip-msg [entry]
+  (if-let [msg (:msg entry)]
+    (assoc-in entry [:msg] [(first msg) :not-fetched])
+    entry))
+
+(defn strip-snapshot [entry]
+  (if (:snapshot entry)
+    (assoc-in entry [:snapshot] :not-fetched)
+    entry))
+
 (defn deliver-perc
   "Find and deliver percolation matches."
   [current-state conn put-fn msg-type msg-payload doc]
   (let [response (perc/percolate conn es-perc-index es-msg-type :doc doc)
         matches (set (map :_id (esrsp/matches-from response)))
         subscriptions (:subscriptions current-state)
-        put-msg-type (if (msg-type #{:firehose/cmp-recv :firehose/cmp-put})
-                       :firehose/msg
-                       :firehose/snapshot)]
+        no-payload (-> msg-payload (strip-msg) (strip-snapshot))]
+    (put-fn (with-meta [:entry/new no-payload] {:sente-uid :broadcast}))
     (doseq [[sha subscription] subscriptions]
       (when (contains? matches sha)
-        (put-fn (with-meta [put-msg-type msg-payload]
+        (put-fn (with-meta [:entry/perc-match no-payload]
                            {:sente-uid (:sente-uid subscription)
-                            :query-id  (:query-id subscription)}))) )))
+                            :query-id  (:query-id subscription)}))))))
 
 (defn firehose-msg-handler
   "Handler for firehose messages, persists messages into configured
@@ -66,15 +75,7 @@
                  (map read-string))
         new-state (assoc-in current-state [:subscriptions perc-id]
                             {:sente-uid uid
-                             :query-id query-id})
-        strip-msg (fn [entry]
-                    (if-let [msg (:msg entry)]
-                      (assoc-in entry [:msg] [(first msg) :not-fetched])
-                      entry))
-        strip-snapshot (fn [entry]
-                    (if (:snapshot entry)
-                      (assoc-in entry [:snapshot] :not-fetched)
-                      entry))]
+                             :query-id  query-id})]
     (perc/register-query conn es-perc-index perc-id :query query)
     ;(prn res)
     {:new-state new-state
@@ -85,12 +86,12 @@
 
 (defn fetch-entry
   ""
-  [{:keys [current-state msg-payload ]}]
+  [{:keys [current-state msg-payload]}]
   (log/info "fetch entry" msg-payload)
   (let [conn (:conn current-state)
         entry (:_source (esd/get conn es-index "st-msg" msg-payload))
         parsed (read-string (:msg entry))]
-    {:emit-msg  [:entry/fetched parsed]}))
+    {:emit-msg [:entry/fetched parsed]}))
 
 (defn persistence-state-fn
   "Initializes ElasticSearch connection."

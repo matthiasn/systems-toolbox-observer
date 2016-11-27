@@ -11,7 +11,6 @@
   [entry k state snapshot put-fn]
   (when (and (k @state) (k entry))
     (let [firehose-id (:firehose-id entry)]
-      (prn firehose-id (get-in snapshot [:fetched firehose-id]))
       (if (or (= :not-fetched (:snapshot entry))
               (= :not-fetched (second (:msg entry))))
         (if-let [fetched (get-in snapshot [:fetched firehose-id])]
@@ -87,11 +86,36 @@
        ^{:key (:firehose-id entry)}
        [timeline-entry entry snapshot put-fn])]))
 
+(defn counters-view
+  [counters]
+  [:div.counters
+   [:h3 "Counters"]
+   [:table
+    [:tbody
+     [:tr [:th "msg-type"] [:th "count"]]
+     (for [[msg-type cnt] (:msg-types counters)]
+       ^{:key msg-type}
+       [:tr
+        [:td (str msg-type)]
+        [:td cnt]])]]
+   [:table
+    [:tbody
+     [:tr [:th "cmp-id"] [:th "snapshots"]]
+     (for [[cmp-id cnt] (:snapshots counters)]
+       ^{:key cmp-id}
+       [:tr
+        [:td (str cmp-id)]
+        [:td cnt]])]]])
+
 (defn widget-view
   [snapshot query-id put-fn cfg]
-  [:div.widget {:key       query-id
-                :data-grid (:data-grid cfg)}
-   [timeline-view snapshot put-fn query-id]])
+  (let [t (:type cfg)]
+    [:div.widget {:key       query-id
+                  :data-grid (:data-grid cfg)}
+     (case t
+       :timeline [timeline-view snapshot put-fn query-id]
+       :counters [counters-view (:counters snapshot)]
+       [:div "unknown type"])]))
 
 (def react-grid-layout (rc/adapt-react-class js/ReactGridLayout))
 
