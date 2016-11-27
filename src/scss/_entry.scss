@@ -1,5 +1,6 @@
 .entry {
   padding: 0.5em 0.8em 0.2em 0.8em;
+  font-size: 0.8em;
 
   pre {
     min-height: 22px;
@@ -11,18 +12,41 @@
   }
 
   time {
-    font-size: 0.7em;
+    font-size: 0.8em;
     font-weight: bold;
     margin-right: 0.5em;
   }
 
-  .show-data {
-    margin-left: 0.8em;
-    padding: 1px 5px;
-    color: white;
-    background-color: lighten(desaturate($hashtag-blue, 35%), 15%);
-    cursor: pointer;
-    font-size: 0.8em;
-  }
+  .show-data-btns {
+    padding-top: 0.2em;
 
+    .show-btn {
+      margin-right: 0.8em;
+      padding: 1px 5px;
+      color: white;
+      background-color: lighten(desaturate($hashtag-blue, 35%), 15%);
+      cursor: pointer;
+      font-size: 0.8em;
+    }
+  }
+}
+
+.timeline {
+  overflow: auto;
+  height: 100%;
+  background-color: whitesmoke;
+}
+
+.btn {
+  margin-left: 1em;
+  padding: 1px 5px;
+  color: white;
+  font-size: 0.8em;
+  background-color: $green;
+  cursor: pointer;
+  white-space: nowrap;
+
+  .fa {
+    padding-right: 0.1em;
+  }
 }

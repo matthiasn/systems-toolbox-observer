@@ -3,8 +3,8 @@
             [matthiasn.systems-toolbox-sente.client :as sente]
             [matthiasn.systems-toolbox-observer.spec]
             [matthiasn.systems-toolbox-observer.store :as store]
-            [matthiasn.systems-toolbox-observer.search :as search]
-            [matthiasn.systems-toolbox-observer.timeline :as tl]))
+            [matthiasn.systems-toolbox-observer.menu :as menu]
+            [matthiasn.systems-toolbox-observer.grid :as g]))
 
 (enable-console-print!)
 
@@ -19,17 +19,19 @@
     switchboard
     [[:cmd/init-comp #{(sente/cmp-map :client/ws-cmp sente-cfg)
                        (store/cmp-map :client/store-cmp)
-                       (search/cmp-map :client/search-cmp)
-                       (tl/cmp-map :client/timeline-cmp)}]
+                       (menu/cmp-map :client/menu-cmp)
+                       (g/cmp-map :client/grid-cmp)}]
 
-     [:cmd/route {:from #{:client/ws-cmp}
+     [:cmd/route {:from #{:client/ws-cmp
+                          :client/menu-cmp
+                          :client/grid-cmp}
                   :to   :client/store-cmp}]
 
-     [:cmd/route {:from #{:client/search-cmp}
+     [:cmd/route {:from #{:client/menu-cmp
+                          :client/grid-cmp}
                   :to   :client/ws-cmp}]
 
      [:cmd/observe-state {:from :client/store-cmp
-                          :to   #{:client/timeline-cmp}}]]))
+                          :to   #{:client/grid-cmp}}]]))
 
 (init!)
-

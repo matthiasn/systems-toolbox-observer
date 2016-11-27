@@ -11,19 +11,19 @@
      {:lang "en"}
      [:head
       [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
-      [:title "Inspect"]
+      [:title "systems-toolbox-observer"]
       [:link {:href "/webjars/normalize-css/4.1.1/normalize.css"
               :media "screen" :rel "stylesheet"}]
       [:link {:href "/webjars/github-com-mrkelly-lato/0.3.0/css/lato.css"
               :media "screen" :rel "stylesheet"}]
       [:link {:href "/webjars/fontawesome/4.6.3/css/font-awesome.css"
               :media "screen" :rel "stylesheet"}]
-      [:link {:href "/css/inspect.css" :media "screen" :rel "stylesheet"}]]
+      [:link {:href "/css/observer.css" :media "screen" :rel "stylesheet"}]]
      [:body
       [:div.flex-container
        [:div#header]
        [:div#search]
-       [:div#timeline]]
+       [:div#grid]]
       [:script {:src "/js/build/observer.js"}]]]))
 
 (def sente-map

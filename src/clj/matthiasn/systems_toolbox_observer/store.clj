@@ -4,7 +4,6 @@
             [clojurewerkz.elastisch.rest.response :as esrsp]
             [clojurewerkz.elastisch.rest :as esr]
             [clojurewerkz.elastisch.rest.percolation :as perc]
-            [pandect.core :as p]
             [clojure.tools.logging :as log]
             [matthiasn.systems-toolbox.handler-utils :as hu]
             [clojure.pprint :as pp]))
@@ -15,18 +14,19 @@
 (def es-msg-type "st-msg")
 
 (defn deliver-perc
-  "Find and deliver pecolation matches."
+  "Find and deliver percolation matches."
   [current-state conn put-fn msg-type msg-payload doc]
   (let [response (perc/percolate conn es-perc-index es-msg-type :doc doc)
         matches (set (map :_id (esrsp/matches-from response)))
-        connected-uids (:connected-uids current-state)
         subscriptions (:subscriptions current-state)
         put-msg-type (if (msg-type #{:firehose/cmp-recv :firehose/cmp-put})
                        :firehose/msg
                        :firehose/snapshot)]
-    (doseq [uid (:any connected-uids)]
-      (when (contains? matches (get subscriptions uid))
-        (put-fn (with-meta [put-msg-type msg-payload] {:sente-uid uid}))))))
+    (doseq [[sha subscription] subscriptions]
+      (when (contains? matches sha)
+        (put-fn (with-meta [put-msg-type msg-payload]
+                           {:sente-uid (:sente-uid subscription)
+                            :query-id  (:query-id subscription)}))) )))
 
 (defn firehose-msg-handler
   "Handler for firehose messages, persists messages into configured
@@ -38,7 +38,6 @@
                       (update-in [:count] inc)
                       (update-in [:messages] #(vec (conj % msg-payload))))
         doc {:msg (pr-str msg-payload) :ts (:ts msg-payload)}]
-    (log/info "Firehose message" msg-type msg-payload)
     (try
       (esd/put conn es-index es-msg-type es-id doc)
       (deliver-perc current-state conn put-fn msg-type msg-payload doc)
@@ -52,9 +51,9 @@
   [{:keys [current-state msg-payload msg-meta]}]
   (prn "es-query" msg-payload)
   (let [conn (:conn current-state)
-        {:keys [query n from]} msg-payload
-        sha (p/sha1 (str query))
+        {:keys [query n from query-id]} msg-payload
         uid (:sente-uid msg-meta)
+        perc-id (str query-id "-" uid)
         search (esd/search conn es-index "st-msg"
                            :query query
                            :size n
@@ -64,10 +63,14 @@
         res (->> hits
                  (map :_source)
                  (map :msg)
-                 (map read-string))]
-    (perc/register-query conn es-perc-index sha :query query)
-    {:new-state (assoc-in current-state [:subscriptions uid] sha)
-     :emit-msg [:entries/prev {:result (vec (reverse res))}]}))
+                 (map read-string))
+        new-state (assoc-in current-state [:subscriptions perc-id]
+                            {:sente-uid uid
+                             :query-id query-id})]
+    (perc/register-query conn es-perc-index perc-id :query query)
+    {:new-state new-state
+     :emit-msg  [:entries/prev {:result   (vec (reverse res))
+                                :query-id query-id}]}))
 
 (defn persistence-state-fn
   "Initializes ElasticSearch connection."
